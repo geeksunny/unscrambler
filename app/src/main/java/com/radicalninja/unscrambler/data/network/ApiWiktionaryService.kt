@@ -25,7 +25,9 @@ interface ApiWiktionaryService {
         private const val TYPE_FORMAT = "format"
         private const val VALUE_FORMAT = "json"
 
-        operator fun invoke(): ApiWiktionaryService {
+        operator fun invoke(
+            connectivityInterceptor: ConnectivityInterceptor
+        ): ApiWiktionaryService {
             val requestInterceptor = Interceptor { chain ->
                 val url = chain.request()
                     .url()
@@ -41,6 +43,7 @@ interface ApiWiktionaryService {
 
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(requestInterceptor)
+                .addInterceptor(connectivityInterceptor)
                 .build()
             return Retrofit.Builder()
                 .client(okHttpClient)
