@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.radicalninja.unscrambler.data.network.ApiWiktionaryService
+import com.radicalninja.unscrambler.data.network.ConnectivityInterceptorImpl
+import com.radicalninja.unscrambler.data.network.DictionaryDataSourceImpl
 import com.radicalninja.unscrambler.databinding.ActivityMainBinding
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -34,16 +37,16 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         // Testing API call
-        GlobalScope.launch {
-            val result = ApiWiktionaryService().getWords("word|notaword")
-            if (result != null) {
-                Log.d("API Query Response", result.body().toString())
-                result.body()?.result?.pages?.forEach { (s, pagesEntry) ->
-                    Log.d("API Query Response", "Title ${pagesEntry.title} - Is a valid word? ${pagesEntry.isValidWord()}")
-                }
-            } else {
-                Log.d("API Query Response", "result is null!")
+        val apiService = ApiWiktionaryService(ConnectivityInterceptorImpl(this))
+        val dictionaryDataSource = DictionaryDataSourceImpl(apiService)
+        dictionaryDataSource.lastFetchedWordData.observe(this, Observer {
+            Log.d("API Query Response", it.toString())
+            it.result.pages.forEach { (s, pagesEntry) ->
+                Log.d("API Query Response", "Title ${pagesEntry.title} - Is a valid word? ${pagesEntry.isValidWord()}")
             }
+        })
+        GlobalScope.launch {
+            dictionaryDataSource.fetchWords("word|notaword")
         }
     }
 
