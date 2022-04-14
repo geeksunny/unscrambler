@@ -9,7 +9,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.radicalninja.unscrambler.data.ApiWiktionaryService
+import com.radicalninja.unscrambler.data.network.ApiWiktionaryService
 import com.radicalninja.unscrambler.databinding.ActivityMainBinding
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.radicalninja.unscrambler.data.response
+package com.radicalninja.unscrambler.data.network.response
 
 import com.google.gson.annotations.SerializedName
 

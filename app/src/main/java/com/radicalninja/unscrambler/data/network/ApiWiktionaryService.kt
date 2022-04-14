@@ -1,7 +1,6 @@
-package com.radicalninja.unscrambler.data
+package com.radicalninja.unscrambler.data.network
 
-import com.radicalninja.unscrambler.data.response.SearchQueryResponse
-import kotlinx.coroutines.Deferred
+import com.radicalninja.unscrambler.data.network.response.SearchQueryResponse
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Response
