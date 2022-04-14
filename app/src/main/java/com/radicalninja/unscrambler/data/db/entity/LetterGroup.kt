@@ -19,7 +19,7 @@ data class LetterGroup(@ColumnInfo(name = "letters") val letters: String) {
     @TypeConverters(StringListTypeConverters::class)
     var _validWords: MutableList<String> = mutableListOf()
 
-    fun getValidWords() = _validWords as List<String>
+    //fun getValidWords() = _validWords as List<String>
 
     fun getPossibleWordsSet(): Set<String> {
         TODO("Need to create strings of possible words, max 50 at a time. ex: abc|acb|bac|bca")
