@@ -2,7 +2,6 @@ package com.radicalninja.unscrambler
 
 import android.os.Bundle
 import android.util.Log
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
@@ -10,17 +9,22 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.radicalninja.unscrambler.data.network.ApiWiktionaryService
-import com.radicalninja.unscrambler.data.network.ConnectivityInterceptorImpl
-import com.radicalninja.unscrambler.data.network.DictionaryDataSourceImpl
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.radicalninja.unscrambler.data.network.DictionaryDataSource
 import com.radicalninja.unscrambler.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+
+    @Inject
+    lateinit var dictionaryDataSource: DictionaryDataSource
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +41,6 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         // Testing API call
-        val apiService = ApiWiktionaryService(ConnectivityInterceptorImpl(this))
-        val dictionaryDataSource = DictionaryDataSourceImpl(apiService)
         dictionaryDataSource.lastFetchedWordData.observe(this, Observer {
             Log.d("API Query Response", it.toString())
             it.result.pages.forEach { (s, pagesEntry) ->
